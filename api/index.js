@@ -57,10 +57,10 @@ app.post("/login", async (req, res) => {
 
 app.post("/register", async (req, res) => {
   try {
-    //const hashedPassword = await bcrypt.hash(req.body.password, 10);
+    const hashedPassword = await bcrypt.hash(req.body.password, 10);
     const user = await User.create({
       user_name: req.body.username,
-      password: req.body.password,
+      password: hashedPassword,
     });
     res.status(201).json(user);
   } catch(error) {
