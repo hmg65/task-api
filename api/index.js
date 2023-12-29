@@ -142,6 +142,21 @@ app.get("/tasks/:list_id", async (req, res) => {
   }
 });
 
+//update list_id of task
+
+app.put("/movetask", async (req, res) => {
+  //update task
+  try {
+    const task = await Task.update(
+      { list_id: req.body.list_id },
+      { where: { task_id: req.body.task_id } }
+    );
+    res.status(201).json(task);
+  } catch (error) {
+    res.status(500).send();
+  }
+});
+
 app.put("/tasks", async (req, res) => {
   //update task
   try {
