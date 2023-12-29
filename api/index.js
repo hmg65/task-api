@@ -104,6 +104,18 @@ app.put("/lists", async (req, res) => {
   }
 });
 
+app.delete("/lists/:list_id", async (req, res) => {
+  //delete list
+  try {
+    const list = await List.destroy({
+      where: { list_id: req.params.list_id },
+    });
+    res.status(200).json(list);
+  } catch (error) {
+    res.status(500).send();
+  }
+});
+
 app.post("/tasks", async (req, res) => {
   //create task
   try {
