@@ -14,11 +14,14 @@ const sequelize = new Sequelize(
   "postgres://gslafacc:22x60wNBbefpSmWZRPg2oEYl-EMH45Fe@satao.db.elephantsql.com/gslafacc"
 );
 
-const User = sequelize.define("user", {
+const User = sequelize.define("User", {
   user_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   user_name: {type: DataTypes.STRING},
   password: {type: DataTypes.STRING},
 });
+
+User.sync();
+
 
 const List = sequelize.define("list", {
   list_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -26,12 +29,16 @@ const List = sequelize.define("list", {
   user_id: {type: DataTypes.INTEGER},
 });
 
+List.sync();
+
 const Task = sequelize.define("task", {
   task_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   task_description: {type: DataTypes.STRING},
   list_id: {type: DataTypes.INTEGER},
   task_status: {type: DataTypes.STRING},
 });
+
+Task.sync();
 
 app.post("/login", async (req, res) => {
   try {
@@ -56,7 +63,8 @@ app.post("/register", async (req, res) => {
       password: req.body.password,
     });
     res.status(201).json(user);
-  } catch {
+  } catch(error) {
+    console.log(error);
     res.status(500).send();
   }
 });
