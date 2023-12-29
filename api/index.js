@@ -9,8 +9,10 @@ dotenv.config();
 
 app.use(express.json());
 
+let url = process.env.URL
+
 const { Sequelize } = require('sequelize');
-const sequelize = new Sequelize('postgres://gslafacc:22x60wNBbefpSmWZRPg2oEYl-EMH45Fe@satao.db.elephantsql.com/gslafacc')
+const sequelize = new Sequelize(url)
 
 const User = sequelize.define('user', {
     user_id: { type: Sequelize.INTEGER, primaryKey: true, autoIncrement: true },
