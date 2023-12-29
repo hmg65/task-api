@@ -12,13 +12,13 @@ app.use(express.json());
 let url = process.env.URL;
 const sequelize = new Sequelize(url);
 
-const User = sequelize.define("User", {
+const Cred = sequelize.define("Cred", {
   user_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-  user_name: { type: DataTypes.STRING },
+  email: { type: DataTypes.STRING},
   password: { type: DataTypes.STRING },
 });
 
-User.sync();
+Cred.sync();
 
 const List = sequelize.define("List", {
   list_id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
@@ -39,11 +39,11 @@ Task.sync();
 
 app.post("/login", async (req, res) => {
   try {
-    const user = await User.findOne({
-      where: { user_name: req.body.username },
+    const user = await Cred.findOne({
+      where: { email: req.body.email },
     });
     if (user && (await bcrypt.compare(req.body.password, user.password))) {
-      res.status(200).send("Login successful");
+      res.status(200).json(user.user_id);
     } else {
       res.status(401).send("Username or password incorrect");
     }
@@ -55,8 +55,8 @@ app.post("/login", async (req, res) => {
 app.post("/register", async (req, res) => {
   try {
     const hashedPassword = await bcrypt.hash(req.body.password, 10);
-    const user = await User.create({
-      user_name: req.body.username,
+    const user = await Cred.create({
+      email: req.body.email,
       password: hashedPassword,
     });
     res.status(201).json(user);
